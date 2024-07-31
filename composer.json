@@ -1,0 +1,72 @@
+{
+  "name": "laravel/laravel",
+  "type": "project",
+  "description": "The skeleton application for the Laravel framework.",
+  "keywords": [
+    "laravel",
+    "framework"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^8.2",
+    "doctrine/migrations": "^3.8",
+    "doctrine/orm": "^3.2",
+    "illuminate/support": "^11.9"
+  },
+  "require-dev": {
+    "doctrine/data-fixtures": "^1.7",
+    "fakerphp/faker": "^1.23",
+    "friendsofphp/php-cs-fixer": "^3.59",
+    "mockery/mockery": "^1.6",
+    "nunomaduro/collision": "^8.0",
+    "phpstan/phpstan": "^1.11",
+    "phpunit/phpunit": "^11.0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "LaravelDoctrine\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "paratest": [
+      "XDEBUG_MODE=off php ./vendor/bin/paratest --configuration ./phpunit.xml"
+    ],
+    "paratest-with-coverage": [
+      "XDEBUG_MODE=coverage php ./vendor/bin/paratest --configuration ./phpunit.xml --coverage-html coverage"
+    ],
+    "phpstan-analyse": [
+      "XDEBUG_MODE=off php ./vendor/bin/phpstan analyse --memory-limit=-1"
+    ],
+    "php-cs-fixer-check": [
+      "XDEBUG_MODE=off php ./vendor/bin/php-cs-fixer check --allow-risky=yes"
+    ],
+    "php-cs-fixer-fix": [
+      "XDEBUG_MODE=off php ./vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LaravelDoctrine\\Providers\\DoctrineServiceProvider",
+        "LaravelDoctrine\\Providers\\DoctrineMigrationsServiceProvider",
+        "LaravelDoctrine\\Providers\\DoctrineDataFixturesServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "php-http/discovery": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
