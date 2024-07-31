@@ -1,10 +1,12 @@
 {
-  "name": "laravel/laravel",
-  "type": "project",
-  "description": "The skeleton application for the Laravel framework.",
+  "name": "joshmurrayeu/laravel-doctrine",
+  "type": "library",
+  "description": "Doctrine for Laravel with migrations and fixtures.",
   "keywords": [
     "laravel",
-    "framework"
+    "doctrine",
+    "migrations",
+    "data-fixtures"
   ],
   "license": "MIT",
   "require": {
