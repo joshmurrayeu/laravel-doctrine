@@ -35,7 +35,9 @@ class DoctrineServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->publishes(['config/doctrine.php'], 'laravel-doctrine-config');
+        $this->publishes([
+            __DIR__ . '/../../config/doctrine.php'
+        ], 'laravel-doctrine-config');
     }
 
     /**
