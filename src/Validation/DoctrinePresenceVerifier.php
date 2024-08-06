@@ -36,6 +36,8 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
 
         $increment = 0;
         $shouldDisableSoftDeleteFilter = false;
+        $filters = $this->entityManager->getFilters();
+        $isSoftDeletesEnabled = $filters->isEnabled(SoftDeleteFilter::NAME);
 
         foreach ($extra as $column => $value) {
             $increment++;
@@ -66,13 +68,13 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
                 ->setParameter($parameterName, $value);
         }
 
-        if ($shouldDisableSoftDeleteFilter === true) {
+        if ($isSoftDeletesEnabled && $shouldDisableSoftDeleteFilter) {
             $this->entityManager->getFilters()->disable(SoftDeleteFilter::NAME);
         }
 
         $result = $query->getQuery()->getSingleScalarResult();
 
-        if ($shouldDisableSoftDeleteFilter === true) {
+        if ($isSoftDeletesEnabled && $shouldDisableSoftDeleteFilter) {
             $this->entityManager->getFilters()->enable(SoftDeleteFilter::NAME);
         }
 
