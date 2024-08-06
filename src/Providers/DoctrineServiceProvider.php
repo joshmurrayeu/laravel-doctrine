@@ -36,7 +36,7 @@ class DoctrineServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../../config' => app_path('config'),
+            __DIR__ . '/../../config' => base_path('config'),
         ], 'laravel-doctrine-config');
     }
 
