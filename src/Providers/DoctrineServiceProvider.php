@@ -33,6 +33,11 @@ class DoctrineServiceProvider extends ServiceProvider
 
     protected array $filtersToEnable = [];
 
+    public function boot(): void
+    {
+        $this->publishes(['config/doctrine.php'], 'laravel-doctrine-config');
+    }
+
     /**
      * @throws BindingResolutionException
      */
@@ -113,7 +118,7 @@ class DoctrineServiceProvider extends ServiceProvider
 
             $configuration->setProxyDir($proxies['path']);
             $configuration->setProxyNamespace($proxies['namespace']);
-            $configuration->setAutoGenerateProxyClasses((bool) $proxies['auto_generate']);
+            $configuration->setAutoGenerateProxyClasses((bool)$proxies['auto_generate']);
 
             foreach ($filters as $filterClassName) {
                 $filterName = $filterClassName::NAME;
