@@ -35,10 +35,20 @@ abstract class Fixture extends AbstractFixture implements OrderedFixtureInterfac
 
     abstract protected function handle(): void;
 
-    public function onlyRunOnLocal(): void
+    public function exitUnlessOnLocal(): void
     {
-        if (!in_array(env('APP_ENV'), ['local', 'dev'])) {
+        if (!$this->onlyRunOnLocal()) {
             throw new WrongEnvironmentException();
         }
+    }
+
+    public function onlyRunOnLocal(): bool
+    {
+        return $this->environment('local', 'dev');
+    }
+
+    public function environment(string ...$environments): bool
+    {
+        return in_array(env('APP_ENV'), $environments);
     }
 }
