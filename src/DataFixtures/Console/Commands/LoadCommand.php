@@ -11,8 +11,6 @@ use Illuminate\Console\Command;
 use LaravelDoctrine\Loaders\FixtureLoader;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 
-use function LaravelDoctrine\Console\Commands\DataFixtures\database_path;
-
 class LoadCommand extends Command
 {
     protected $signature = 'doctrine:fixtures:load';

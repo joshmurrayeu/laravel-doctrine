@@ -13,9 +13,7 @@
     "php": "^8.2",
     "doctrine/migrations": "^3.8",
     "doctrine/orm": "^3.2",
-    "illuminate/support": "^11.9",
-    "illuminate/validation": "^11.9",
-    "illuminate/config": "^11.9",
+    "laravel/framework": "^11",
     "fakerphp/faker": "^1.23"
   },
   "require-dev": {
