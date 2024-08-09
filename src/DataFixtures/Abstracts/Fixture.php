@@ -27,10 +27,15 @@ abstract class Fixture extends AbstractFixture implements OrderedFixtureInterfac
         $this->manager = $manager;
 
         try {
+            $this->preHandle();
             $this->handle();
         } catch (ConstraintNotMetException $exception) {
             return;
         }
+    }
+
+    protected function preHandle(): void
+    {
     }
 
     abstract protected function handle(): void;
