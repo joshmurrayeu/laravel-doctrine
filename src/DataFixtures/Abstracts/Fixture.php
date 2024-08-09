@@ -9,7 +9,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
-use LaravelDoctrine\Exceptions\DataFixtures\Abstracts\ConstraintNotMetException;
 use LaravelDoctrine\Exceptions\DataFixtures\WrongEnvironmentException;
 
 abstract class Fixture extends AbstractFixture implements OrderedFixtureInterface
@@ -28,7 +27,7 @@ abstract class Fixture extends AbstractFixture implements OrderedFixtureInterfac
 
         try {
             $this->handle();
-        } catch (ConstraintNotMetException $exception) {
+        } catch (WrongEnvironmentException $exception) {
             return;
         }
     }
