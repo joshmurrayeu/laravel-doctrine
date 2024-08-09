@@ -15,11 +15,11 @@
     "doctrine/orm": "^3.2",
     "illuminate/support": "^11.9",
     "illuminate/validation": "^11.9",
-    "illuminate/config": "^11.9"
+    "illuminate/config": "^11.9",
+    "fakerphp/faker": "^1.23"
   },
   "require-dev": {
     "doctrine/data-fixtures": "^1.7",
-    "fakerphp/faker": "^1.23",
     "friendsofphp/php-cs-fixer": "^3.59",
     "mockery/mockery": "^1.6",
     "nunomaduro/collision": "^8.0",

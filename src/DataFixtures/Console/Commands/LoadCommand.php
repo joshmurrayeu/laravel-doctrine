@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelDoctrine\Console\Commands\DataFixtures;
+namespace LaravelDoctrine\DataFixtures\Console\Commands;
 
 use Doctrine\Common\DataFixtures\Executor\MultipleTransactionORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -10,6 +10,8 @@ use Doctrine\ORM\EntityManager;
 use Illuminate\Console\Command;
 use LaravelDoctrine\Loaders\FixtureLoader;
 use Symfony\Component\Console\Command\Command as BaseCommand;
+
+use function LaravelDoctrine\Console\Commands\DataFixtures\database_path;
 
 class LoadCommand extends Command
 {

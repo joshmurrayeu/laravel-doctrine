@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LaravelDoctrine\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelDoctrine\Console\Commands\DataFixtures\LoadCommand;
+use LaravelDoctrine\DataFixtures\Console\Commands\LoadCommand;
 use LaravelDoctrine\Loaders\FixtureLoader;
 
 class DoctrineDataFixturesServiceProvider extends ServiceProvider
