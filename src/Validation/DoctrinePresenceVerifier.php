@@ -35,9 +35,10 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
         $expr = $query->expr();
 
         $increment = 0;
-        $shouldDisableSoftDeleteFilter = false;
         $filters = $this->entityManager->getFilters();
         $isSoftDeletesEnabled = $filters->isEnabled(SoftDeleteFilter::NAME);
+
+        $includesDeletedAt = in_array('deletedAt', array_keys($extra));
 
         foreach ($extra as $column => $value) {
             $increment++;
@@ -47,8 +48,6 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
             $parameterName = ":value{$increment}";
 
             if ($column === 'deletedAt') {
-                $shouldDisableSoftDeleteFilter = true;
-
                 $tempValue = strtoupper($value);
 
                 if (str_contains($tempValue, 'IS') && str_contains($tempValue, 'NULL')) {
@@ -68,13 +67,13 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
                 ->setParameter($parameterName, $value);
         }
 
-        if ($isSoftDeletesEnabled || $shouldDisableSoftDeleteFilter) {
+        if ($isSoftDeletesEnabled && $includesDeletedAt) {
             $this->entityManager->getFilters()->disable(SoftDeleteFilter::NAME);
         }
 
         $result = $query->getQuery()->getSingleScalarResult();
 
-        if ($isSoftDeletesEnabled || $shouldDisableSoftDeleteFilter) {
+        if ($isSoftDeletesEnabled && $includesDeletedAt) {
             $this->entityManager->getFilters()->enable(SoftDeleteFilter::NAME);
         }
 
