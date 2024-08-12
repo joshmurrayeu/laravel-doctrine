@@ -68,13 +68,13 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
                 ->setParameter($parameterName, $value);
         }
 
-        if ($isSoftDeletesEnabled && $shouldDisableSoftDeleteFilter) {
+        if ($isSoftDeletesEnabled || $shouldDisableSoftDeleteFilter) {
             $this->entityManager->getFilters()->disable(SoftDeleteFilter::NAME);
         }
 
         $result = $query->getQuery()->getSingleScalarResult();
 
-        if ($isSoftDeletesEnabled && $shouldDisableSoftDeleteFilter) {
+        if ($isSoftDeletesEnabled || $shouldDisableSoftDeleteFilter) {
             $this->entityManager->getFilters()->enable(SoftDeleteFilter::NAME);
         }
 
