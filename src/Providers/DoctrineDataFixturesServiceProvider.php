@@ -13,14 +13,7 @@ class DoctrineDataFixturesServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $config = config('fixtures');
-
-        if (empty($config)) {
-            throw new RuntimeException(
-                'Please publish the config with `php artisan vendor:publish --tag=laravel-doctrine-config`.'
-            );
-        }
-
+        $config = config('fixtures', []);
         $enabled = $config['enabled'] ?? false;
 
         if (!$enabled) {
