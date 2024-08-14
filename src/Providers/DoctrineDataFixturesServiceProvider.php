@@ -12,7 +12,9 @@ class DoctrineDataFixturesServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // only continue if on dev
+        if (config('fixtures.enabled') === false) {
+            return;
+        }
 
         $this->registerFixtureLoader();
 
