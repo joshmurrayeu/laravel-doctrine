@@ -7,12 +7,23 @@ namespace LaravelDoctrine\Providers;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\DataFixtures\Console\Commands\LoadCommand;
 use LaravelDoctrine\Loaders\FixtureLoader;
+use RuntimeException;
 
 class DoctrineDataFixturesServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        if (config('fixtures.enabled') === false) {
+        $config = config('fixtures');
+
+        if (empty($config)) {
+            throw new RuntimeException(
+                'Please publish the config with `php artisan vendor:publish --tag=laravel-doctrine-config`.'
+            );
+        }
+
+        $enabled = $config['enabled'] ?? false;
+
+        if (!$enabled) {
             return;
         }
 
