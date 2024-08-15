@@ -122,9 +122,9 @@ abstract class Repository extends EntityRepository
     }
 
     /**
-     * @param Entity $entity
+     * @param T $entity
      *
-     * @return Entity
+     * @return T
      */
     public function store(Entity $entity, bool $flush = true): Entity
     {
@@ -140,7 +140,7 @@ abstract class Repository extends EntityRepository
     }
 
     /**
-     * @param Entity $entity
+     * @param T $entity
      */
     public function delete(
         Entity $entity,
