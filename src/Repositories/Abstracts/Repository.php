@@ -8,12 +8,39 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use LaravelDoctrine\Entities\Abstracts\Entity;
+use LaravelDoctrine\Filters\SoftDeleteFilter;
 
 /**
  * @template T of Entity
  */
 abstract class Repository extends EntityRepository
 {
+    /**
+     * @return T
+     */
+    public function fetchOne(int $id, bool $disableSoftDeleteFilter = false): Entity
+    {
+        $entityManager = $this->getEntityManager();
+
+        $filters = $entityManager->getFilters();
+        $isSoftDeletesEnabled = $filters->isEnabled(SoftDeleteFilter::NAME);
+
+        if ($isSoftDeletesEnabled && $disableSoftDeleteFilter) {
+            $filters->disable(SoftDeleteFilter::NAME);
+        }
+
+        $result = $this->find($id);
+
+        if ($isSoftDeletesEnabled && $disableSoftDeleteFilter) {
+            $filters->enable(SoftDeleteFilter::NAME);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return T[]
+     */
     public function fetchAll(
         int $page,
         int $rows,
