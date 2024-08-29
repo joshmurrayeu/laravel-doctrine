@@ -23,6 +23,7 @@ use Illuminate\Validation\Factory;
 use LaravelDoctrine\Console\Commands\ORM\CreateCommand;
 use LaravelDoctrine\Console\Commands\ORM\DropCommand;
 use LaravelDoctrine\Console\Commands\ORM\GenerateProxiesCommand;
+use LaravelDoctrine\Console\Commands\ORM\RefreshDatabaseCommand;
 use LaravelDoctrine\Loaders\EntityManagerLoader;
 use LaravelDoctrine\NamingStrategies\UnderscorePluralNamingStrategy;
 use LaravelDoctrine\Validation\DoctrinePresenceVerifier;
@@ -60,6 +61,7 @@ class DoctrineServiceProvider extends ServiceProvider
             CreateCommand::class,
             DropCommand::class,
             GenerateProxiesCommand::class,
+            RefreshDatabaseCommand::class,
         ]);
     }
 
