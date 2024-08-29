@@ -29,12 +29,17 @@ abstract class Fixture extends AbstractFixture implements OrderedFixtureInterfac
         try {
             $this->preHandle();
             $this->handle();
+            $this->postHandle();
         } catch (ConstraintNotMetException $exception) {
             return;
         }
     }
 
     protected function preHandle(): void
+    {
+    }
+
+    protected function postHandle(): void
     {
     }
 
