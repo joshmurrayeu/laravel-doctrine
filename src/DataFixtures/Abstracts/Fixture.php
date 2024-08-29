@@ -6,6 +6,7 @@ namespace LaravelDoctrine\DataFixtures\Abstracts;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
@@ -15,7 +16,7 @@ use LaravelDoctrine\Exceptions\DataFixtures\WrongEnvironmentException;
 abstract class Fixture extends AbstractFixture implements OrderedFixtureInterface
 {
     protected Generator $faker;
-    protected ObjectManager $manager;
+    protected EntityManagerInterface|ObjectManager $manager;
 
     public function __construct(Factory $factory)
     {
