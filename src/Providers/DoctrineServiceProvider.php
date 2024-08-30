@@ -39,6 +39,14 @@ class DoctrineServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../config' => base_path('config'),
         ], 'laravel-doctrine-config');
+
+        $this->app->call(function (EventManager $eventManager, Repository $repository) {
+            foreach ($repository->get('doctrine.subscribers') as $subscriber) {
+                $eventManager->addEventSubscriber(
+                    $this->app->make($subscriber)
+                );
+            }
+        });
     }
 
     /**
@@ -50,7 +58,6 @@ class DoctrineServiceProvider extends ServiceProvider
 
         $this->registerConnection();
         $this->registerConfig();
-        $this->registerEventManager();
 
         $this->registerEntityManager();
         $this->registerRepositories();
@@ -135,24 +142,6 @@ class DoctrineServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerEventManager(): void
-    {
-        $this->app->singleton(EventManager::class, function () {
-            /** @var Repository $repository */
-            $repository = $this->app->make(Repository::class);
-
-            $eventManager = new EventManager();
-
-            foreach ($repository->get('doctrine.subscribers') as $subscriber) {
-                $eventManager->addEventSubscriber(
-                    $this->app->make($subscriber)
-                );
-            }
-
-            return $eventManager;
-        });
-    }
-
     protected function registerEntityManager(): void
     {
         $this->app->singleton(EntityManager::class, function () {
@@ -186,6 +175,9 @@ class DoctrineServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     protected function registerRepositories(): void
     {
         /** @var EntityManager $entityManager */
