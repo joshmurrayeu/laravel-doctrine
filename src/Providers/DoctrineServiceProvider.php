@@ -31,22 +31,22 @@ use LaravelDoctrine\Validation\DoctrinePresenceVerifier;
 class DoctrineServiceProvider extends ServiceProvider
 {
     protected array $config;
-
     protected array $filtersToEnable = [];
 
-    public function boot(): void
+    /**
+     * @throws BindingResolutionException
+     */
+    public function boot(EntityManager $entityManager, Repository $repository): void
     {
         $this->publishes([
             __DIR__ . '/../../config' => base_path('config'),
         ], 'laravel-doctrine-config');
 
-        $this->app->call(function (EventManager $eventManager, Repository $repository) {
-            foreach ($repository->get('doctrine.subscribers') as $subscriber) {
-                $eventManager->addEventSubscriber(
-                    $this->app->make($subscriber)
-                );
-            }
-        });
+        foreach ($repository->get('doctrine.subscribers') as $subscriber) {
+            $entityManager->getEventManager()->addEventSubscriber(
+                $this->app->make($subscriber)
+            );
+        }
     }
 
     /**
