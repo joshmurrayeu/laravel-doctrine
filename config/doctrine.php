@@ -38,4 +38,15 @@ return [
     'filters' => [
         // LaravelDoctrine\Filters\SoftDeleteFilter::class,
     ],
+
+    /**
+     * By default, query logging has been enabled. Remove the
+     */
+    'middlewares' => [
+        function (Illuminate\Foundation\Application $application): Doctrine\DBAL\Driver\Middleware|false {
+            return new Doctrine\DBAL\Logging\Middleware(
+                $application->make(Illuminate\Log\Logger::class)
+            );
+        },
+    ],
 ];

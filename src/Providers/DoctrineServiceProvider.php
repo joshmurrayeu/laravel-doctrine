@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaravelDoctrine\Providers;
 
+use Closure;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as MySqlDriver;
@@ -18,6 +19,7 @@ use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Factory;
 use LaravelDoctrine\Console\Commands\ORM\CreateCommand;
@@ -130,6 +132,18 @@ class DoctrineServiceProvider extends ServiceProvider
             $configuration->setProxyDir($proxies['path']);
             $configuration->setProxyNamespace($proxies['namespace']);
             $configuration->setAutoGenerateProxyClasses((bool)$proxies['auto_generate']);
+
+            $middlewares = $this->config['middlewares'] ?? [];
+
+            if (!empty($middlewares)) {
+                $middlewares = array_map(function (Closure $closure, Application $application) {
+                    return $closure($application);
+                }, $middlewares);
+
+                $middlewares = array_filter($middlewares);
+            }
+
+            $configuration->setMiddlewares($middlewares);
 
             foreach ($filters as $filterClassName) {
                 $filterName = $filterClassName::NAME;
