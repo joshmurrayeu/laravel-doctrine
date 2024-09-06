@@ -19,7 +19,6 @@ use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Factory;
 use LaravelDoctrine\Console\Commands\ORM\CreateCommand;
@@ -136,8 +135,8 @@ class DoctrineServiceProvider extends ServiceProvider
             $middlewares = $this->config['middlewares'] ?? [];
 
             if (!empty($middlewares)) {
-                $middlewares = array_map(function (Closure $closure, Application $application) {
-                    return $closure($application);
+                $middlewares = array_map(function (Closure $closure) {
+                    return $closure($this->app);
                 }, $middlewares);
 
                 $middlewares = array_filter($middlewares);
