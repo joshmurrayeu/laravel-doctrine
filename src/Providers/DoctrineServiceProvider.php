@@ -81,7 +81,7 @@ class DoctrineServiceProvider extends ServiceProvider
         /** @var Repository $repository */
         $repository = $this->app->make(Repository::class);
 
-        $this->config = $repository->get('doctrine');
+        $this->config = $repository->get('doctrine', []);
     }
 
     protected function registerConnection(): void
