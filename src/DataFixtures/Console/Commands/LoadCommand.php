@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelDoctrine\DataFixtures\Console\Commands;
 
 use Doctrine\Common\DataFixtures\Executor\MultipleTransactionORMExecutor;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Console\Command;
@@ -29,7 +30,7 @@ class LoadCommand extends Command
     {
         $this->fixtureLoader->loadFromDirectory(database_path('fixtures'));
 
-        $executor = new MultipleTransactionORMExecutor($this->entityManager, new ORMPurger());
+        $executor = new ORMExecutor($this->entityManager, new ORMPurger());
         $executor->execute($this->fixtureLoader->getFixtures());
 
         $this->output->success('Done');
