@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaravelDoctrine\DataFixtures\Console\Commands;
 
-use Doctrine\Common\DataFixtures\Executor\MultipleTransactionORMExecutor;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
@@ -14,7 +13,7 @@ use Symfony\Component\Console\Command\Command as BaseCommand;
 
 class LoadCommand extends Command
 {
-    protected $signature = 'doctrine:fixtures:load';
+    protected $signature = 'doctrine:fixtures:load {--purge : Purge the database before running fixtures }';
 
     protected $description = 'Load data fixtures to your database.';
 
@@ -30,8 +29,15 @@ class LoadCommand extends Command
     {
         $this->fixtureLoader->loadFromDirectory(database_path('fixtures'));
 
-        $executor = new ORMExecutor($this->entityManager, new ORMPurger());
-        $executor->execute($this->fixtureLoader->getFixtures());
+        $purge = $this->option('purge');
+        $executor = new ORMExecutor($this->entityManager);
+
+        if ($purge === true) {
+            $executor->setPurger(new ORMPurger($this->entityManager));
+        }
+
+        // execute() requires $append to be true/false -> the opposite of $purge.
+        $executor->execute($this->fixtureLoader->getFixtures(), !$purge);
 
         $this->output->success('Done');
 
