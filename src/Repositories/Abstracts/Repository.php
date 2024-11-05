@@ -96,27 +96,29 @@ abstract class Repository extends EntityRepository
             // By default, we just want to use an equals check.
             $part = $expr->eq($qualifiedName, $parameterName);
 
-            // If $value is a string with commas, explode the string to an array AND run a SQL `e.field IN ()`.
-            if (str_contains($value, ',')) {
-                $value = explode(',', $value);
-                $part = $expr->in($qualifiedName, $parameterName);
+            if (is_string($value)) {
+                // If $value is a string with commas, explode the string to an array AND run a SQL `e.field IN ()`.
+                if (str_contains($value, ',')) {
+                    $value = explode(',', $value);
+                    $part = $expr->in($qualifiedName, $parameterName);
 
-                $query->where($part)
-                    ->setParameter($parameterName, $value);
+                    $query->where($part)
+                        ->setParameter($parameterName, $value);
 
-                continue;
-            }
+                    continue;
+                }
 
-            if (str_contains($value, '>')) {
-                $this->betweenQueryPart('>', $expr, $qualifiedName, $parameterName, $value, $query);
+                if (str_contains($value, '>')) {
+                    $this->betweenQueryPart('>', $expr, $qualifiedName, $parameterName, $value, $query);
 
-                continue;
-            }
+                    continue;
+                }
 
-            if (str_contains($value, '<')) {
-                $this->betweenQueryPart('<', $expr, $qualifiedName, $parameterName, $value, $query);
+                if (str_contains($value, '<')) {
+                    $this->betweenQueryPart('<', $expr, $qualifiedName, $parameterName, $value, $query);
 
-                continue;
+                    continue;
+                }
             }
 
             $query->where($part)
