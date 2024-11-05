@@ -140,11 +140,16 @@ abstract class Repository extends EntityRepository
         }
     }
 
-    public function getCount(): int
+    public function getCount(array $filters = []): int
     {
-        return $this->createQueryBuilder('e')
-            ->select('COUNT(e)')
-            ->getQuery()
+        $query = $this->createQueryBuilder('e')
+            ->select('COUNT(e)');
+
+        if (!empty($filters)) {
+            $this->applyFilters($query, $filters);
+        }
+
+        return $query->getQuery()
             ->getSingleScalarResult();
     }
 
