@@ -90,7 +90,21 @@ abstract class Repository extends EntityRepository
         $expr = $query->expr();
 
         foreach ($filters as $field => $value) {
-            $qualifiedName = "e.{$field}";
+            $aliases = $query->getAllAliases();
+            $alias = $aliases[0];
+
+            // Did the filter contain an alias?
+            if (str_contains($field, '.')) {
+                // Yes, we have an alias... possible.. maybe...
+                $fieldParts = explode('.', $field);
+
+                if (in_array($fieldParts[0], $aliases)) {
+                    $alias = $fieldParts[0];
+                    $field = end($fieldParts);
+                }
+            }
+
+            $qualifiedName = "{$alias}.{$field}";
             $parameterName = ":{$field}Values";
 
             // By default, we just want to use an equals check.
