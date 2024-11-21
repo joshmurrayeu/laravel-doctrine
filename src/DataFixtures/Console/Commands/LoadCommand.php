@@ -8,7 +8,9 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use LaravelDoctrine\Loaders\FixtureLoader;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 
 class LoadCommand extends Command
@@ -24,6 +26,8 @@ class LoadCommand extends Command
 
     /**
      * Execute the console command.
+     *
+     * @throws BindingResolutionException
      */
     public function handle(): int
     {
@@ -35,6 +39,8 @@ class LoadCommand extends Command
         if ($purge === true) {
             $executor->setPurger(new ORMPurger($this->entityManager));
         }
+
+        $executor->setLogger($this->laravel->make(LoggerInterface::class));
 
         // execute() requires $append to be true/false -> the opposite of $purge.
         $executor->execute($this->fixtureLoader->getFixtures(), !$purge);
