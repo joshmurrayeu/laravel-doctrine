@@ -80,7 +80,7 @@ abstract class Repository extends EntityRepository
 
         $part = $expr->between($qualifiedName, $low, $high);
 
-        $query->where($part)
+        $query->andWhere($part)
             ->setParameter($low, $value[0])
             ->setParameter($high, $value[1]);
     }
@@ -116,7 +116,7 @@ abstract class Repository extends EntityRepository
                     $value = explode(',', $value);
                     $part = $expr->in($qualifiedName, $parameterName);
 
-                    $query->where($part)
+                    $query->andWhere($part)
                         ->setParameter($parameterName, $value);
 
                     continue;
@@ -135,7 +135,7 @@ abstract class Repository extends EntityRepository
                 }
             }
 
-            $query->where($part)
+            $query->andWhere($part)
                 ->setParameter($parameterName, $value);
         }
     }
