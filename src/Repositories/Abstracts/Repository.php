@@ -38,15 +38,17 @@ abstract class Repository extends EntityRepository
         return $result;
     }
 
+
+
     /**
      * @return T[]
      */
-    public function fetchAll(
+    public function fetchAllQuery(
         int $page,
         int $rows,
         array $filters = [],
         array $sorts = [],
-    ): array {
+    ): QueryBuilder {
         $start = ($page - 1) * $rows;
 
         $query = $this->createQueryBuilder('e')
@@ -61,7 +63,20 @@ abstract class Repository extends EntityRepository
             $this->applySorts($query, $sorts);
         }
 
-        return $query->getQuery()
+        return $query;
+    }
+
+    /**
+     * @return T[]
+     */
+    public function fetchAll(
+        int $page,
+        int $rows,
+        array $filters = [],
+        array $sorts = [],
+    ): array {
+        return $this->fetchAllQuery($page, $rows, $filters, $sorts)
+            ->getQuery()
             ->getResult();
     }
 
