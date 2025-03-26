@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LaravelDoctrine\Validation;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\DatabasePresenceVerifierInterface;
 use LaravelDoctrine\Filters\SoftDeleteFilter;
 use LaravelDoctrine\Repositories\Abstracts\Repository;
@@ -42,6 +44,26 @@ class DoctrinePresenceVerifier implements DatabasePresenceVerifierInterface
 
         foreach ($extra as $column => $value) {
             $increment++;
+
+            if ($value instanceof \Closure) {
+                // horrible workaround for exists
+                $connection = new Connection($query->getEntityManager()->getConnection()->getNativeConnection());
+                $builder = new Builder($connection);
+
+                $value($builder);
+
+                foreach ($builder->wheres as $key => $where) {
+                    if ($where['type'] !== 'In') {
+                        throw new \Exception('Unsure how to handle.');
+                    }
+
+                    $query->andWhere(
+                        $expr->in("e.{$where['column']}", ":inValues{$key}")
+                    )->setParameter("inValues{$key}", $where['values']);
+                }
+
+                continue;
+            }
 
             $qualifiedColumn = "e.{$column}";
             $operator = '=';
