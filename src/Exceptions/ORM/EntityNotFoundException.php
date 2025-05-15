@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelDoctrine\Exceptions;
+namespace LaravelDoctrine\Exceptions\ORM;
 
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Arr;

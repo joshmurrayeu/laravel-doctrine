@@ -3,8 +3,8 @@
 namespace LaravelDoctrine\Console\Commands\ORM;
 
 use Illuminate\Console\Command;
+use LaravelDoctrine\Console\Commands\DataFixtures\LoadCommand;
 use LaravelDoctrine\Console\Commands\Migrations\MigrateCommand;
-use LaravelDoctrine\DataFixtures\Console\Commands\LoadCommand;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 
 class RefreshDatabaseCommand extends Command

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelDoctrine\DataFixtures\Console\Commands;
+namespace LaravelDoctrine\Console\Commands\DataFixtures;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;

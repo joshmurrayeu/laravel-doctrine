@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelDoctrine\DataFixtures\Abstracts;
+namespace LaravelDoctrine\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
