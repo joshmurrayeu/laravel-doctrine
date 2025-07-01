@@ -20,8 +20,8 @@ class DiffCommand extends Command
                             {--line-length=120 : Max line length of unformatted lines.}
                             {--check-database-platform=false : Check Database Platform to the generated code.}
                             {--allow-empty-diff : Do not throw an exception when no changes are detected.}
+                            {--nowdoc : Output the generated SQL as a nowdoc string (always active for formatted queries).}
                             {--from-empty-schema : Generate a full migration as if the current database was empty.}';
-
     protected $description = 'Generate a migration by comparing your current database to your mapping information.';
 
     /**
