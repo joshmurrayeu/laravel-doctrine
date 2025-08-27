@@ -188,26 +188,22 @@ class DoctrineServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * @throws BindingResolutionException
-     */
     protected function registerRepositories(): void
     {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->app->make(EntityManager::class);
+        $this->app->afterResolving(EntityManagerInterface::class, function (EntityManagerInterface $entityManager) {
+            $meta = $entityManager->getMetadataFactory();
 
-        $meta = $entityManager->getMetadataFactory();
-
-        foreach ($meta->getAllMetadata() as $classMetadata) {
-            if (($repositoryClassName = $classMetadata->customRepositoryClassName) && !empty($repositoryClassName)) {
-                $this->app->singleton(
-                    $repositoryClassName,
-                    function () use ($repositoryClassName, $entityManager, $classMetadata) {
-                        return new $repositoryClassName($entityManager, $classMetadata);
-                    }
-                );
+            foreach ($meta->getAllMetadata() as $classMetadata) {
+                if (($repositoryClassName = $classMetadata->customRepositoryClassName) && !empty($repositoryClassName)) {
+                    $this->app->singleton(
+                        $repositoryClassName,
+                        function () use ($repositoryClassName, $entityManager, $classMetadata) {
+                            return new $repositoryClassName($entityManager, $classMetadata);
+                        }
+                    );
+                }
             }
-        }
+        });
     }
 
     protected function registerPresenceVerifier(): void
