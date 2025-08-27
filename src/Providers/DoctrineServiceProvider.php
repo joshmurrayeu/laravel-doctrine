@@ -34,20 +34,22 @@ class DoctrineServiceProvider extends ServiceProvider
     protected array $config;
     protected array $filtersToEnable = [];
 
-    /**
-     * @throws BindingResolutionException
-     */
-    public function boot(EntityManager $entityManager, Repository $repository): void
+    public function boot(Repository $repository): void
     {
         $this->publishes([
             __DIR__ . '/../../config' => base_path('config'),
         ], 'laravel-doctrine-config');
 
-        foreach ($repository->get('doctrine.subscribers') as $subscriber) {
-            $entityManager->getEventManager()->addEventSubscriber(
-                $this->app->make($subscriber)
-            );
-        }
+        $this->app->afterResolving(
+            EntityManagerInterface::class,
+            function (EntityManagerInterface $entityManager) use ($repository) {
+                foreach ($repository->get('doctrine.subscribers') as $subscriber) {
+                    $entityManager->getEventManager()->addEventSubscriber(
+                        $this->app->make($subscriber)
+                    );
+                }
+            }
+        );
     }
 
     /**
