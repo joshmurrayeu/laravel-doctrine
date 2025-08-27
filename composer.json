@@ -13,7 +13,7 @@
     "php": "^8.4",
     "doctrine/migrations": "^3.8",
     "doctrine/orm": "^3.2",
-    "laravel/framework": "^11",
+    "laravel/framework": "^12",
     "fakerphp/faker": "^1.23"
   },
   "require-dev": {
