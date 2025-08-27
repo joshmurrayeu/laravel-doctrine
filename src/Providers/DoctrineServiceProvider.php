@@ -34,22 +34,11 @@ class DoctrineServiceProvider extends ServiceProvider
     protected array $config;
     protected array $filtersToEnable = [];
 
-    public function boot(Repository $repository): void
+    public function boot(): void
     {
         $this->publishes([
             __DIR__ . '/../../config' => base_path('config'),
         ], 'laravel-doctrine-config');
-
-        $this->app->afterResolving(
-            EntityManagerInterface::class,
-            function (EntityManagerInterface $entityManager) use ($repository) {
-                foreach ($repository->get('doctrine.subscribers') as $subscriber) {
-                    $entityManager->getEventManager()->addEventSubscriber(
-                        $this->app->make($subscriber)
-                    );
-                }
-            }
-        );
     }
 
     /**
@@ -192,7 +181,7 @@ class DoctrineServiceProvider extends ServiceProvider
 
     protected function registerRepositories(): void
     {
-        $this->app->afterResolving(EntityManagerInterface::class, function (EntityManagerInterface $entityManager) {
+        $this->app->resolving(EntityManagerInterface::class, function (EntityManagerInterface $entityManager) {
             $meta = $entityManager->getMetadataFactory();
 
             foreach ($meta->getAllMetadata() as $classMetadata) {
@@ -205,7 +194,40 @@ class DoctrineServiceProvider extends ServiceProvider
                     );
                 }
             }
+
+            $repository = $this->app->make(Repository::class);
+            $subscribers = $repository->get('doctrine.subscribers');
+
+            $eventManager = $entityManager->getEventManager();
+            $events = $eventManager->getAllListeners();
+
+            foreach ($subscribers as $subscriber) {
+                if ($this->checkIfSubscriberIsRegistered($events, $subscriber)) {
+                    continue;
+                }
+
+                $a = $this->app->make($subscriber);
+
+                $entityManager->getEventManager()->addEventSubscriber($a);
+            }
         });
+    }
+
+    protected function checkIfSubscriberIsRegistered(array $events, string $subscriber): bool
+    {
+        $results = array_map(function (array $listeners) use ($subscriber) {
+            $listeners = array_map(function (object $listener) {
+                return get_class($listener);
+            }, $listeners);
+
+            return in_array($subscriber, array_flip($listeners));
+        }, $events);
+
+        if (empty($results)) {
+            return false;
+        }
+
+        return array_any($results, fn(bool $value) => $value === true);
     }
 
     protected function registerPresenceVerifier(): void
